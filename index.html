@@ -1,0 +1,205 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="author" content="Stefan Korecko" />
+    <link rel="stylesheet" href="css/style.css">
+    <title>Videohosting</title>
+</head>
+<body>
+
+
+<nav>
+    <a href="#welcome">Welcome</a>
+    <a href="#articles/1/20">Articles</a>
+    <a href="#opinions">Opinions</a>
+    <a href="#addOpinion">AddOpinion</a>
+
+</nav>
+
+<main id="router-view">
+
+
+</main>
+
+
+<!--Templates for dynamically inserted html-->
+
+<script id="template-welcome" type="text/template">
+    <header>
+        <h1>Videohosting</h1>
+    </header>
+    <p>
+        Jednoducho povedané, toto je stránka na ukladanie videoobsahu. Takéto stránky sa používajú na rôzne účely:
+        niekto na
+        nich trávi čas kvôli zábave a získavaniu potrebných informácií, niekto zarába peniaze na reklame uverejňovaním
+        zaujímavých videí a priťahovaním nových predplatiteľov. Zástupcovia obchodnej komunity využívajú takéto služby
+        na
+        prilákanie ďalšej návštevnosti na stránku, predstavenie potenciálnych zákazníkov značke/produktu, získanie
+        spätnej
+        väzby, priame recenzie atď. Celá SEO propagácia je založená na získavaní nových zákazníkov z výsledkov
+        vyhľadávania.
+        Prispievajú k tomu kvalitné videá, keďže videoobsah si v poslednej dobe získava čoraz väčšiu obľubu.
+    </p>
+</script>
+<script id="template-articles" type="text/template">
+    <h2>Main Content</h2>
+    <article>
+        <h2>{{title}}<i class="tab">{{dateCreated}}</i></h2>
+        <p>
+            <img src={{imageLink}} alt="image" width="200" height="200">
+        </p>
+        <p>
+            by {{author}}
+        </p>
+    </article>
+    <p>
+        Displaying page {{currPage}} of {{pageCount}} pages.
+    </p>
+    <nav>
+        {{#prevPage}}
+        <a href="#articles/{{prevPage}}/{{pageCount}}"><< Previous page</a>
+        {{/prevPage}}
+        {{#nextPage}}
+        <a id="next" href="#articles/{{nextPage}}/{{pageCount}}">Next page >></a>
+        {{/nextPage}}
+    </nav>
+</script>
+
+<script id="template-articles-error" type="text/template">
+
+    <article>
+        <h2>Articles acquisition failed</h2>
+        <p>
+            {{errMessage}}
+        </p>
+    </article>
+
+</script>
+<script id="template-opinions" type="text/template">
+    <article  id="artOpinions">
+        <h2>Visitor Opinions</h2>
+        {{#.}}
+        <section>
+            <fieldset>
+                <legend>Mail:{{mail}}</legend>
+                <h3>{{name}} <i>{{created}}</i></h3>
+                <p>{{comment}}</p>
+                <p class="no_print"><img src={{url}} alt="image" width="200" height="200"></p>
+                <p>Klučove slova: {{datalist1}}</p>
+                <p>Urobiť kopiu formulara: {{flag}}</p>
+                <p>Anonimne: {{radio}}</p>
+            </fieldset>
+        </section>
+        {{/.}}
+        {{^.}}
+        <section>
+            Sorry, no opinions found.
+        </section>
+        {{/.}}
+    </article>
+</script>
+<script id="template-addOpinion" type="text/template">
+    <article  id="artOpnFrm">
+        <h2>Your Opinion</h2>
+        <p>
+            Please, use the form below to state your opinion about this page.
+        </p>
+        <form id="myForm" action="#" method="get" enctype="multipart/form-data" class="slideDown">
+            <fieldset>
+                <legend>Recenzia</legend>
+                <p><span>
+        <input id="nameEL" disabled placeholder="Meno Priezvisko" type="text" name="name" value="">
+    </span>
+                    <label for="nameEL" class="form_text">
+                        Meno
+                    </label>
+                </p>
+                <p><span>
+        <input id="mailEl" placeholder="example@exmpl.com" type="text" name="mail" value="">
+    </span>
+                    <label for="mailEl" class="form_text">
+                        Email
+                    </label>
+                </p>
+                <p><span>
+        <input id="urlEl" placeholder="https://www.example.com" type="url" name="photo" value="">
+    </span>
+                    <label for="urlEl" class="form_text">
+                        Obrazok
+                    </label>
+                </p>
+                <p>
+                    <label class="form_text">Odoslať formulár anonymne?</label>
+                    <br>
+                    <span>
+        <input type="radio" name="anonymous" checked id="contactChoice1" value=""><label
+                            for="contactChoice1">Ano</label>
+        </span>
+                    <span>
+        <input type="radio" name="anonymous" id="contactChoice2" value=""><label for="contactChoice2">Nie</label>
+        </span>
+                </p>
+                <p>
+        <span>
+        <input type="checkbox" id="contactChoice3" checked name="copy" value=""><label for="contactChoice3">Odolsať kopiu formularu</label>
+        </span>
+                </p>
+                <p>
+                    <label class="form_text" for="keywords">Kľúčové slová:</label>
+                    <span>
+        <input list="keylist" id="keywords" name="keywords">
+        </span>
+                    <datalist id="keylist">
+                        <option value="Videohosting">
+                        <option value="Video">
+                        <option value="Návštevnosť">
+                        <option value="Youtube">
+                        <option value="Internet">
+                    </datalist>
+                </p>
+                <p>
+                    <label class="form_text" for="recenzia">Ohodnite</label>
+                    <textarea id="recenzia" placeholder="Recenzia" name="text"></textarea>
+                </p>
+
+                <p>
+                    <span><button type="submit" value="Submit">Submit</button></span>
+                    <span><button type="reset" value="Reset">Reset</button></span>
+                </p>
+            </fieldset>
+        </form>
+    </article>
+</script>
+<script id="template-about" type="text/template">
+    <h2>About me</h2>
+    <p>
+        My name is <i>Štefan Korečko.</i>
+        I created this demo for you to learn
+        about parametrised hash routers.
+    </p>
+</script>
+
+<script id="template-main" type="text/template">
+    <h2>Main Content</h2>
+    <p>
+        Displaying page {{currPage}} of {{pageCount}} pages.
+    </p>
+    <nav>
+        {{#prevPage}}
+        <a href="#main/{{prevPage}}/{{pageCount}}"><< Previous page</a>
+        {{/prevPage}}
+        {{#nextPage}}
+        <a href="#main/{{nextPage}}/{{pageCount}}">Next page >></a>
+        {{/nextPage}}
+    </nav>
+</script>
+
+<!--include mustache javascript-->
+<script  src="js/mustache.min.js"></script>
+
+<!--include javascript for this page-->
+<script  type="module" src="js/index.js"></script>
+
+</body>
+</html>
