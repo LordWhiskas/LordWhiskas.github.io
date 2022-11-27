@@ -1,21 +1,19 @@
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-    <meta charset="UTF-8" />
-    <meta name="author" content="Stefan Korecko" />
+    <meta charset="UTF-8"/>
+    <meta name="author" content="Stefan Korecko"/>
     <link rel="stylesheet" href="css/style.css">
     <title>Videohosting</title>
 </head>
 <body>
 
 
-<nav>
-    <a href="#welcome">Welcome</a>
-    <a href="#articles/1/20">Articles</a>
-    <a href="#opinions">Opinions</a>
-    <a href="#addOpinion">AddOpinion</a>
-
+<nav class="topnav">
+    <a id="wel" class="active" href="#welcome">Welcome</a>
+    <a id="art" href="#articles/1/100">Articles</a>
+    <a id="opi" href="#opinions">Opinions</a>
+    <a id="add" href="#addOpinion">AddOpinion</a>
 </nav>
 
 <main id="router-view">
@@ -28,8 +26,9 @@
 
 <script id="template-welcome" type="text/template">
     <header>
-        <h1>Videohosting</h1>
+        <h2>Videohosting</h2>
     </header>
+    <img class="index-photo" src="img/indeximage.jpg" alt="image">
     <p>
         Jednoducho povedané, toto je stránka na ukladanie videoobsahu. Takéto stránky sa používajú na rôzne účely:
         niekto na
@@ -46,13 +45,41 @@
 <script id="template-articles" type="text/template">
     <h2>Main Content</h2>
     <article>
-        <h2>{{title}}<i class="tab">{{dateCreated}}</i></h2>
-        <p>
-            <img src={{imageLink}} alt="image" width="200" height="200">
-        </p>
-        <p>
-            by {{author}}
-        </p>
+
+        {{#title}}
+        <fieldset>
+            <legend>
+                <h1>{{title}}</h1>
+            </legend>
+            {{#dateCreated}}
+            <p>{{dateCreated}}</p>
+            {{/dateCreated}}
+            {{^dateCreated}}
+            <p>No data</p>
+            {{/dateCreated}}
+            {{#author}}
+            <p>{{author}}</p>
+            {{/author}}
+            {{#imageLink}}
+            <p>
+                <img src={{imageLink}} alt="image" height="200" width="200">
+            </p>
+            {{/imageLink}}
+            {{^imageLink}}
+            <p>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/2048px-No_image_available.svg.png"
+                     alt="No image" height="200" width="200">
+            </p>
+            {{/imageLink}}
+            {{#tags}}
+            <p>#Tags:{{tags}}</p>
+            {{/tags}}
+            {{^tags}}
+            <p>No tags</p>
+            {{/tags}}
+        </fieldset>
+        {{/title}}
+
     </article>
     <p>
         Displaying page {{currPage}} of {{pageCount}} pages.
@@ -78,7 +105,7 @@
 
 </script>
 <script id="template-opinions" type="text/template">
-    <article  id="artOpinions">
+    <article id="artOpinions">
         <h2>Visitor Opinions</h2>
         {{#.}}
         <section>
@@ -101,7 +128,7 @@
     </article>
 </script>
 <script id="template-addOpinion" type="text/template">
-    <article  id="artOpnFrm">
+    <article id="artOpnFrm">
         <h2>Your Opinion</h2>
         <p>
             Please, use the form below to state your opinion about this page.
@@ -197,10 +224,10 @@
 </script>
 
 <!--include mustache javascript-->
-<script  src="js/mustache.min.js"></script>
+<script src="js/mustache.min.js"></script>
 
 <!--include javascript for this page-->
-<script  type="module" src="js/index.js"></script>
+<script type="module" src="js/index.js"></script>
 
 </body>
 </html>
