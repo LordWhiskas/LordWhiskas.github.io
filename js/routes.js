@@ -9,7 +9,7 @@ export default [
         //the function that returns content to be rendered to the target html element:
         getTemplate:(targetElm) =>
             document.getElementById(targetElm).innerHTML =
-                document.getElementById("template-welcome").innerHTML
+                document.getElementById("template-welcome").innerHTML,
     },
     {
         hash:"articles",
@@ -30,6 +30,10 @@ export default [
             if (localStorage.myTreesComments) {
                 opinions = JSON.parse(localStorage.myTreesComments);
             }
+            document.getElementById("art").classList = null;
+            document.getElementById("wel").classList = null;
+            document.getElementById("opi").classList = null;
+            document.getElementById("add").classList = "active";
             document.getElementById(targetElm).innerHTML = document.getElementById("template-addOpinion").innerHTML;
             document.getElementById("nameEL").value = "Anonymous";
             document.getElementById("contactChoice2").value = "No";
@@ -117,6 +121,10 @@ export default [
     }
 ];
 function createHtml4opinions(targetElm){
+    document.getElementById("art").classList = null;
+    document.getElementById("wel").classList = null;
+    document.getElementById("opi").classList = "active";
+    document.getElementById("add").classList = null;
     const opinionsFromStorage=localStorage.myTreesComments;
     let opinions=[];
     if(opinionsFromStorage){
@@ -125,18 +133,22 @@ function createHtml4opinions(targetElm){
             opinion.created = (new Date(opinion.created)).toDateString();
         });
     }
-
     document.getElementById(targetElm).innerHTML = Mustache.render(
         document.getElementById("template-opinions").innerHTML,
         opinions
     );
 }
 function fetchAndDisplayArticles(targetElm,current,totalCount){
+    document.getElementById("art").classList = "active";
+    document.getElementById("wel").classList = null;
+    document.getElementById("opi").classList = null;
+    document.getElementById("add").classList = null;
     current=parseInt(current);
     totalCount=parseInt(totalCount);
     let opinions;
     opinions = [];
-    const url = "http://wt.kpi.fei.tuke.sk/api/article/?max=20&offset=19";
+    var url = "http://wt.kpi.fei.tuke.sk/api/article/?max=20&offset=";
+    url = url.concat(((current - 1) *20).toString());
     function reqListener () {
 
         // stiahnuty text
@@ -144,14 +156,16 @@ function fetchAndDisplayArticles(targetElm,current,totalCount){
             document.getElementById(targetElm).innerHTML =
                 opinions = JSON.parse(this.responseText);
             console.log(opinions);
+            let number = Math.round(opinions["meta"]["totalCount"] /20);
+            totalCount = number + 1;
             const data4rendering={
                 currPage:current,
                 pageCount:totalCount,
-                author:opinions.articles[current - 1]["author"],
-                dateCreated:opinions.articles[current - 1]["dateCreated"].slice(0,10),
-                imageLink:opinions.articles[current - 1]["imageLink"],
-                title:opinions.articles[current - 1]["title"],
-                tags:opinions.articles[current - 1]["tags"][0]
+                author:opinions.articles,
+                dateCreated:opinions.articles,
+                imageLink:opinions.articles,
+                title:opinions.articles,
+                tags:opinions.articles
             };
             if(current>1){
                 data4rendering.prevPage=current-1;
