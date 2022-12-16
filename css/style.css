@@ -1,292 +1,199 @@
-<!DOCTYPE HTML>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="author" content="Stefan Korecko">
-    <link rel="stylesheet" href="css/style.css">
-    <title>Videohosting</title>
-</head>
-<body>
+@font-face {
+    font-family: "Trickster";
+    src: local("Trickster"),
+    url(../Fonts/Montserrat-Regular.ttf)
+}
+.template-article {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+canvas {
+    float: right;
+}
+.topnav {
+    overflow: hidden;
+    background-color: #333;
+}
 
+.topnav a {
+    float: left;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+}
 
-<nav class="topnav">
-    <a id="wel" class="active" href="#welcome">Welcome</a>
-    <a id="art" href="#articles/1/100">Articles</a>
-    <a id="opi" href="#opinions">Opinions</a>
-    <a id="add" href="#addOpinion">AddOpinion</a>
-</nav>
+.topnav a:hover {
+    background-color: #ddd;
+    color: black;
+}
 
-<main id="router-view">
+.topnav a.active {
+    background-color: #4CAF50;
+    color: white;
+}
+.index-photo{
+    float: right;
+    padding: 1em;
+}
+@media screen {
+    .block{
+        margin:0 auto;
+    }
+    .block p{
+        text-align:center;
+        text-transform: uppercase;
+        padding-top: 35px;
+        animation: text 10s infinite linear;
+        padding-left: 100%;
+        white-space: nowrap;
+    }
+    @keyframes text {
+        0%{
+            transform: translate(0, 0);
+        }
 
+        100%{
+            transform: translate(-160%, 0);
+        }
+    }
+    fieldset {
+        background-color: #eeeeee;
+        color: black;
+    }
+    textarea:focus {
+        background: #eaeaea;
+        transition: 0.25s;
+        color: black;
+    }
+    input:focus{
+        background-color: white;
+        outline: 0;
+        color: #b916c4; /* цвет текста */
+        border:2px solid #6264dc; /* цвет обводки */
+        transition: 0.5s;
+    }
+    .footer_text{
+        font-size: 1em;
+        font-family: "Fira S", sans-serif;
+    }
+    body {
+        font-family: Montserrat, serif;
+        color: black;
+        font-style: normal;
+        margin: auto;
+        background-color: white;
+    }
+    .four:hover {
+        transform: scaleX(-1);
+    }
+    .video-hosting {
+        display: flex;
+        margin: 0 auto;
+        border: 0.1em solid #ccc;
+        outline-style: dashed;
+        outline-width: 0.1em;
+        outline-color: red;
 
-</main>
+    }
 
+    .slideDown {
+        animation-name: slideDown;
+        animation-duration: 2s;
+    }
+    .ch-color-1:hover{
+        animation-name: ch-color-1;
+        animation-duration: 2s;
+        transform: scale(1.2);
+        transition: transform 0.25s;
+    }
+    @keyframes ch-color-1 {
+        from {
+            color: royalblue;
+            background-color: white;
+        }
+        50% {
+            color: blue;
+            background-color: white;
+        }
+        to {
+            color: red;
+            background-color: white;
+        }
+    }
+    @keyframes slideDown {
+        0% {
+            transform: translateY(100%);
+        }
 
-<!--Templates for dynamically inserted html-->
+        100% {
+            transform: translateY(0%);
+        }
+    }
+    /*a {
+        display: inline-block;
+        font-size: 1em;
+        color: royalblue;
+        background-color: white;
+    }*/
+}
 
-<script id="template-welcome" type="text/template">
-    <header>
-        <h2>Videohosting</h2>
-    </header>
-    <img class="index-photo" alt="image" srcset="img/indeximage.jpg 100w, img/indeximage.jpg 500w"
-         sizes="(max-width: 500px) 150px,(max-width: 1000px) 200px, 500px">
-    <p>
-        Jednoducho povedané, toto je stránka na ukladanie videoobsahu. Takéto stránky sa používajú na rôzne účely:
-        niekto na
-        nich trávi čas kvôli zábave a získavaniu potrebných informácií, niekto zarába peniaze na reklame uverejňovaním
-        zaujímavých videí a priťahovaním nových predplatiteľov. Zástupcovia obchodnej komunity využívajú takéto služby
-        na
-        prilákanie ďalšej návštevnosti na stránku, predstavenie potenciálnych zákazníkov značke/produktu, získanie
-        spätnej
-        väzby, priame recenzie atď. Celá SEO propagácia je založená na získavaní nových zákazníkov z výsledkov
-        vyhľadávania.
-        Prispievajú k tomu kvalitné videá, keďže videoobsah si v poslednej dobe získava čoraz väčšiu obľubu.
-    </p>
-</script>
-<script id="template-articles" type="text/template">
-    <h2>Main Content</h2>
-    <article>
-        {{#articles}}
-        <article>
-            <h2><a href="{{detailLink}}">{{title}}</a></h2>
-            <p>
-                by {{author}}
-            </p>
-        </article>
-        {{/articles}}
-    </article>
-    <p>
-        Displaying page {{currPage}} of {{pageCount}} pages.
-    </p>
-    <nav>
-        {{#prevPage}}
-        <a href="#articles/{{prevPage}}/{{pageCount}}"><< Previous page</a>
-        {{/prevPage}}
-        {{#nextPage}}
-        <a id="next" href="#articles/{{nextPage}}/{{pageCount}}">Next page >></a>
-        {{/nextPage}}
-    </nav>
-</script>
+h1 {
+    text-align: left;
+    margin: 0 0 0 0.25em;
+    max-width: 50%;
+}
 
-<script id="template-articles-error" type="text/template">
+h4 {
+    padding: 1em;
+    text-align: center;
+    font-size: 18pt;
+}
+span{
+    font-size: 0.7em;
+}
+h3{
+    margin: 0 0 0 0.25em;
+}
+ol {
+    font-size: 1.5em;
+}
+.form_text{
+    font-size: 0.7em;
+}
+.tab { margin-left: 40px; }
+p {
+    max-width: 50%;
+    font-size: 18pt;
+    margin: 0 0 0 0.25em;
+}
+textarea{
+    background: #fce9c0; /* Цвет фона */
+    color: blue;
+    border: 2px solid #a9c358; /* Параметры рамки */
+    padding: 10px; /* Поля */
+    width: 100%; /* Ширина */
+    height: 200px; /* Высота */
+    box-sizing: border-box; /* Алгоритм расчёта ширины */
+    font-size: 14px; /* Размер шрифта */
+}
+table,
+td {
+    margin: 0 auto;
+    text-align: center;
+    border: 0.1em solid #333;
+}
 
-    <article>
-        <h2>Articles acquisition failed</h2>
-        <p>
-            {{errMessage}}
-        </p>
-    </article>
+thead,
+tfoot {
+    background-color: #333;
+    color: #fff;
+}
 
-</script>
-<script id="template-opinions" type="text/template">
-    <article id="artOpinions">
-        <h2>Visitor Opinions</h2>
-        {{#.}}
-        <section>
-            <fieldset>
-                <legend>Mail:{{mail}}</legend>
-                <h3>{{author}} <i>{{dateCreated}}</i></h3>
-                <p>{{content}}</p>
-                <p class="no_print"><img src={{imageLink}} alt="image" width="200" height="200"></p>
-                <p>Klučove slova: {{tags}}</p>
-                <p>Urobiť kopiu formulara: {{flag}}</p>
-                <p>Anonimne: {{radio}}</p>
-            </fieldset>
-        </section>
-        {{/.}}
-        {{^.}}
-        <section>
-            Sorry, no opinions found.
-        </section>
-        {{/.}}
-    </article>
-</script>
-<script id="template-addOpinion" type="text/template">
-    <article id="artOpnFrm">
-        <h2>Your Opinion</h2>
-        <p>
-            Please, use the form below to state your opinion about this page.
-        </p>
-        <form id="myForm" action="#" method="get" enctype="multipart/form-data" class="slideDown">
-            <fieldset>
-                <legend>Recenzia</legend>
-                <p>
-                    <span><input id="title1" placeholder="Title" type="text" name="titleText" value=""></span>
-                    <label for="title1" class="form_text">Title</label>
-                </p>
-                <p>
-                    <span><input id="nameEL" disabled placeholder="Meno Priezvisko" type="text" name="name" value=""></span>
-                    <label for="nameEL" class="form_text">Meno</label>
-                </p>
-                <p>
-                    <span><input id="mailEl" placeholder="example@exmpl.com" type="text" name="mail" value=""></span>
-                    <label for="mailEl" class="form_text">Email</label>
-                </p>
-                <p>
-                    <span><input id="urlEl" placeholder="https://www.example.com" type="url" name="photo" value=""></span>
-                    <label for="urlEl" class="form_text">Obrazok</label>
-                </p>
-                <p>
-                    <label class="form_text">Odoslať formulár anonymne?</label><br>
-                    <span><input type="radio" name="anonymous" checked id="contactChoice1" value="">
-                        <label for="contactChoice1">Ano</label>
-                    </span>
-                    <span>
-                        <input type="radio" name="anonymous" id="contactChoice2" value=""><label for="contactChoice2">Nie</label>
-                    </span>
-                </p>
-                <p>
-                    <span>
-                        <input type="checkbox" id="contactChoice3" checked name="copy" value="">
-                        <label for="contactChoice3">Odolsať kopiu formularu</label>
-                    </span>
-                </p>
-                <p>
-                    <label class="form_text" for="keywords">Kľúčové slová:</label>
-                    <span>
-                        <input list="keylist" id="keywords" name="keywords">
-                    </span>
-                    <datalist id="keylist">
-                        <option value="Videohosting">
-                        <option value="Video">
-                        <option value="Návštevnosť">
-                        <option value="Youtube">
-                        <option value="Internet">
-                    </datalist>
-                </p>
-                <p>
-                    <label class="form_text" for="recenzia">Ohodnite</label>
-                    <textarea id="recenzia" placeholder="Recenzia" name="text"></textarea>
-                </p>
-                <p>
-                    <span><button type="submit" value="Submit">Submit</button></span>
-                    <span><button type="reset" value="Reset">Reset</button></span>
-                </p>
-            </fieldset>
-        </form>
-    </article>
-</script>
-<script id="template-article" type="text/template">
-    <article>
-        <h3 class="template-article">{{title}}</h3>
-        <p class="template-article">
-            by {{author}}
-        </p>
-        {{#imageLink}}
-        <figure class="template-article">
-            <img src="{{imageLink}}" alt="article figure" srcset="{{imageLink}} 100w, {{imageLink}} 1120w"
-                 sizes="(max-width: 500px) 150px,(max-width: 1920px) 500px">
-        </figure>
-        {{/imageLink}}
-        {{^imageLink}}
-        <p class="template-article">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/2048px-No_image_available.svg.png"
-                 alt="No image" width="50%" height="50%">
-        </p>
-        {{/imageLink}}
-        <div class="template-article">{{{content}}}</div>
-        <p class="template-article">
-            Keywords:
-            {{tags}}
-        </p>
-    </article>
-
-    <footer>
-        <a href="{{backLink}}" class="linkAsButton "><< Back</a>
-        <a href="{{editLink}}" class="linkAsButton">Edit</a>
-        <a href="{{deleteLink}}" class="linkAsButton">Delete</a>
-        <a href="#menuTitle" class="linkAsButton">Up to the menu</a>
-    </footer>
-
-</script>
-<script id="template-article-form" type="text/template">
-    <article>
-        <h2>{{formTitle}}</h2> <br><br>
-
-        <form id="articleForm">
-            <label for="author">Author:</label>
-            <input type="text" name="author" id="author" value="{{author}}" size="50"
-                   title="Article author, max. length 100 characters."
-                   maxlength="100" placeholder="e.g. Ján Trieska" />
-            <br>
-            <label for="title">Title:</label>
-            <input type="text" name="title" id="title" value="{{title}}" size="50"
-                   maxlength="100" pattern="\S[\S\s]*" placeholder="e.g. My story." required
-                   title="Article title, mandatory item, max. length: 100 characters.
-The first character must not be a space."  />
-            <br>
-            <label for="imageLink">Image (url):</label>
-            <input type="url" name="imageLink" id="imageLink" value="{{imageLink}}" size="50"
-                   title="Image URL, max. length 100 characters." maxlength="100"/>
-            <br>
-            <label></label>
-            <button type="button" id="btShowFileUpload">
-                Upload image
-            </button>
-
-            <fieldset class="added hiddenElm" id="fsetFileUpload">
-                <legend>Image Upload</legend>
-                <input type="file" id="flElm" name="file" accept="image/jpeg, image/png"/>
-                <br />
-                <button type="button" id="btFileUpload">
-                    Send image to server </button>
-                <button type="button" id="btCancelFileUpload">
-                    Cancel uploading </button>
-            </fieldset>
-
-
-            <br>
-            <label for="content">Article content:</label>
-            <textarea
-                    name="content" id="content" spellcheck="true" lang="sk"
-                    cols="50" rows="20" required
-                    title="Article content, mandatory item, can be plain text or in HTML.">
-              {{content}}
-            </textarea>
-            <br>
-            <label for="tags">Keywords:</label>
-            <input  type="text" name="tags" id="tags" value="{{tags}}" size="50"
-                    title="Keyword list, comma separated." placeholder="e.g. village, drama" />
-            <br> <br>
-            <button type="reset"> Reset Form </button>
-            <button type="submit"> {{submitBtTitle}} </button>
-
-        </form>
-    </article>
-
-    <footer>
-        <a href="{{backLink}}" class="linkAsButton"><< Back</a>
-        <a href="#menuTitle" class="linkAsButton">Up to the menu</a>
-    </footer>
-</script>
-<script id="template-about" type="text/template">
-    <h2>About me</h2>
-    <p>
-        My name is <i>Štefan Korečko.</i>
-        I created this demo for you to learn
-        about parametrised hash routers.
-    </p>
-</script>
-<script id="template-main" type="text/template">
-    <h2>Main Content</h2>
-    <p>
-        Displaying page {{currPage}} of {{pageCount}} pages.
-    </p>
-    <nav>
-        {{#prevPage}}
-        <a href="#main/{{prevPage}}/{{pageCount}}"><< Previous page</a>
-        {{/prevPage}}
-        {{#nextPage}}
-        <a href="#main/{{nextPage}}/{{pageCount}}">Next page >></a>
-        {{/nextPage}}
-    </nav>
-</script>
-
-<!--include mustache javascript-->
-<script src="js/mustache.min.js"></script>
-
-<!--include javascript for this page-->
-<script type="module" src="js/index.js"></script>
-
-</body>
-</html>
+.links {
+    margin: 0 0 0 0;
+    font-size: 1em;
+    padding: 2em;
+}
