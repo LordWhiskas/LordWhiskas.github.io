@@ -2,13 +2,11 @@
  * Created by Stefan Korecko, 2020
  */
 
-
 export default class ParamHashRouter {
   constructor(routes,inithash) {
     this.routes = routes;
 
     window.addEventListener("hashchange", event => this.doRouting(event));
-
     window.location.hash=inithash;
     this.doRouting(inithash);
   }
