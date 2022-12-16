@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="author" content="Stefan Korecko">
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <link rel="stylesheet" href="css/style.css">
     <title>Videohosting</title>
 </head>
@@ -169,31 +168,31 @@
 </script>
 <script id="template-article" type="text/template">
     <article>
-        <h3 class="template-article">{{title}}</h3>
-        <p class="template-article">
+        <h3 >{{title}}</h3>
+        <p>
             by {{author}}
         </p>
         {{#imageLink}}
-        <figure class="template-article">
+        <figure>
             <img src="{{imageLink}}" alt="article figure" srcset="{{imageLink}} 100w, {{imageLink}} 1120w"
                  sizes="(max-width: 500px) 150px,(max-width: 1920px) 500px">
         </figure>
         {{/imageLink}}
         {{^imageLink}}
-        <p class="template-article">
+        <p>
             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/2048px-No_image_available.svg.png"
                  alt="No image" width="50%" height="50%">
         </p>
         {{/imageLink}}
-        <div class="template-article">{{{content}}}</div>
-        <p class="template-article">
+        <div>{{{content}}}</div>
+        <p>
             Keywords:
             {{tags}}
         </p>
     </article>
 
     <footer>
-        <a href="{{backLink}}" class="linkAsButton "><< Back</a>
+        <a href="{{backLink}}" class="linkAsButton"><< Back</a>
         <a href="{{editLink}}" class="linkAsButton">Edit</a>
         <a href="{{deleteLink}}" class="linkAsButton">Delete</a>
         <a href="#menuTitle" class="linkAsButton">Up to the menu</a>
