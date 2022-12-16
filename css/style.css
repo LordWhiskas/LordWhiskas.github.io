@@ -3,11 +3,6 @@
     src: local("Trickster"),
     url(../Fonts/Montserrat-Regular.ttf)
 }
-.template-article {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-}
 canvas {
     float: right;
 }
