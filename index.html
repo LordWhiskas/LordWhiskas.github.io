@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="author" content="Stefan Korecko">
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <link rel="stylesheet" href="css/style.css">
     <title>Videohosting</title>
 </head>
@@ -14,7 +13,7 @@
     <a id="wel" class="active" href="#welcome">Welcome</a>
     <a id="art" href="#articles/1/100">Articles</a>
     <a id="opi" href="#opinions">Opinions</a>
-    <a id="add" href="#addOpinion">AddOpinion</a>
+    <a id="add" href="#addOpinion">Add Opinion and Article </a>
 </nav>
 
 <main id="router-view">
@@ -47,14 +46,15 @@
 <script id="template-articles" type="text/template">
     <h2>Main Content</h2>
     <article>
-        {{#articles}}
-        <article>
-            <h2><a href="{{detailLink}}">{{title}}</a></h2>
-            <p>
-                by {{author}}
-            </p>
-        </article>
-        {{/articles}}
+        <div class="container">
+            <section class="toc-wrapper">
+                <ol class="toc">
+                    {{#articles}}
+                    <li><a href="{{detailLink}}">{{title}}</a> <p>by {{author}}</p></li>
+                    {{/articles}}
+                </ol>
+            </section>
+        </div>
     </article>
     <p>
         Displaying page {{currPage}} of {{pageCount}} pages.
@@ -66,6 +66,11 @@
         {{#nextPage}}
         <a id="next" href="#articles/{{nextPage}}/{{pageCount}}">Next page >></a>
         {{/nextPage}}
+        <p>
+            <label for="goTo" class="form_text">Go to page</label>
+            <span class="goTo"><input id="goTo" placeholder="Page" type="text" name="goTo" value=""></span>
+        </p>
+        <span><button id="goToButton" type="submit" hidden value="Submit">Go</button></span>
     </nav>
 </script>
 
@@ -112,35 +117,33 @@
             <fieldset>
                 <legend>Recenzia</legend>
                 <p>
-                    <span><input id="title1" placeholder="Title" type="text" name="titleText" value=""></span>
                     <label for="title1" class="form_text">Title</label>
+                    <span><input id="title1" placeholder="Title" type="text" name="titleText" value=""></span>
                 </p>
                 <p>
-                    <span><input id="nameEL" disabled placeholder="Meno Priezvisko" type="text" name="name" value=""></span>
                     <label for="nameEL" class="form_text">Meno</label>
+                    <span><input id="nameEL" disabled placeholder="Meno Priezvisko" type="text" name="name" value=""></span>
                 </p>
                 <p>
-                    <span><input id="mailEl" placeholder="example@exmpl.com" type="text" name="mail" value=""></span>
                     <label for="mailEl" class="form_text">Email</label>
+                    <span><input id="mailEl" placeholder="example@exmpl.com" type="text" name="mail" value=""></span>
                 </p>
                 <p>
-                    <span><input id="urlEl" placeholder="https://www.example.com" type="url" name="photo" value=""></span>
                     <label for="urlEl" class="form_text">Obrazok</label>
+                    <span><input id="urlEl" placeholder="https://www.example.com" type="url" name="photo" value=""></span>
                 </p>
                 <p>
-                    <label class="form_text">Odoslať formulár anonymne?</label><br>
-                    <span><input type="radio" name="anonymous" checked id="contactChoice1" value="">
-                        <label for="contactChoice1">Ano</label>
-                    </span>
-                    <span>
-                        <input type="radio" name="anonymous" id="contactChoice2" value=""><label for="contactChoice2">Nie</label>
-                    </span>
+                    <label class="form_text">Chcete formulár odoslať anonymne?</label>
                 </p>
                 <p>
-                    <span>
-                        <input type="checkbox" id="contactChoice3" checked name="copy" value="">
-                        <label for="contactChoice3">Odolsať kopiu formularu</label>
-                    </span>
+                    <label for="contactChoice1" class="form_text">Ano</label>
+                    <span><input id="contactChoice1" checked type="radio" name="radio1" value=""></span>
+                    <label for="contactChoice2" class="form_text">Nie</label>
+                    <span><input id="contactChoice2" type="radio" name="radio1" value=""></span>
+                </p>
+                <p>
+                    <label for="contactChoice3" class="form_text">Chcete poslať kópiu formulára poštou?</label>
+                    <span><input id="contactChoice3" type="checkbox" name="flag" value="No"></span>
                 </p>
                 <p>
                     <label class="form_text" for="keywords">Kľúčové slová:</label>
@@ -185,25 +188,58 @@
                  alt="No image" width="50%" height="50%">
         </p>
         {{/imageLink}}
+        <p>Recenzia:</p>
         <div>{{{content}}}</div>
         <p>
             Keywords:
             {{tags}}
         </p>
+        <div>
+            <fieldset>
+                Comments:
+                <section>
+                    {{#comments}}
+                    <h3>{{1}}</h3>
+                    <p>{{2}}</p>
+                    <p>{{4}}</p>
+                    {{/comments}}
+                </section>
+                <section>
+                    {{^comments}}
+                    Sorry, no comments found.
+                    {{/comments}}
+                </section>
+            </fieldset>
+        </div>
     </article>
 
     <footer>
         <a href="{{backLink}}" class="linkAsButton"><< Back</a>
         <a href="{{editLink}}" class="linkAsButton">Edit</a>
         <a href="{{deleteLink}}" class="linkAsButton">Delete</a>
-        <a href="#menuTitle" class="linkAsButton">Up to the menu</a>
+        <button id="commentSend" name="commentSend" type="submit" >Send comment</button>
     </footer>
-
+    <form id="myForm1" action="#" method="get" enctype="multipart/form-data" class="slideDown" hidden>
+        <fieldset>
+            <legend>Comment</legend>
+            <p>
+                <span><input id="nameEL1" placeholder="Meno Priezvisko" type="text" name="name" value="" class="signup-text-input"></span>
+            </p>
+            <p>
+                <label class="form_text" for="recenzia1">Ohodnite</label>
+                <textarea id="recenzia1" placeholder="Recenzia" name="text"></textarea>
+            </p>
+            <p>
+                <span><button type="submit" value="Submit">Submit</button></span>
+                <span><button type="reset" value="Reset">Reset</button></span>
+            </p>
+        </fieldset>
+    </form>
 </script>
 <script id="template-article-form" type="text/template">
     <article>
+        <fieldset>
         <h2>{{formTitle}}</h2> <br><br>
-
         <form id="articleForm">
             <label for="author">Author:</label>
             <input type="text" name="author" id="author" value="{{author}}" size="50"
@@ -251,13 +287,12 @@ The first character must not be a space."  />
             <br> <br>
             <button type="reset"> Reset Form </button>
             <button type="submit"> {{submitBtTitle}} </button>
-
         </form>
+        </fieldset>
     </article>
 
     <footer>
         <a href="{{backLink}}" class="linkAsButton"><< Back</a>
-        <a href="#menuTitle" class="linkAsButton">Up to the menu</a>
     </footer>
 </script>
 <script id="template-about" type="text/template">
