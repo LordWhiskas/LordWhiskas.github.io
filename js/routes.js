@@ -100,6 +100,7 @@ export default [
                         flag:nopFlag,
                         tags:nopDatalist,
                         dateCreated: new Date()
+
                     };
                 post = JSON.stringify(newOpinion);
                 console.log("New opinion:\n "+JSON.stringify(newOpinion));
@@ -118,9 +119,8 @@ export default [
                 const url1 = "https://wt.kpi.fei.tuke.sk/api/article"
                 let xhr = new XMLHttpRequest();
                 xhr.open('POST', url1, true);
-                xhr.setRequestHeader('Content-type', 'application/json; charset=UTF-8');
+                xhr.setRequestHeader('Content-type','application/json; charset=utf-8');
                 xhr.send(post);
-
                 xhr.onload = function () {
                     if(xhr.status === 201) {
                         console.log("Post successfully created!");
@@ -210,7 +210,10 @@ function fetchAndDisplayArticles(targetElm,current,totalCount){
         if (this.status == 200) {
             const responseJSON = JSON.parse(this.responseText);
             let number = Math.round(responseJSON["meta"]["totalCount"] /20);
-            totalCount = number + 1;
+            if (number*20 < responseJSON["meta"]["totalCount"]){
+                number += 1;
+            }
+            totalCount = number;
             addArtDetailLink2ResponseJson(responseJSON);
             if(current>1){
                 responseJSON.prevPage=current-1;
@@ -222,6 +225,7 @@ function fetchAndDisplayArticles(targetElm,current,totalCount){
             console.log("currPage:");
             console.log(responseJSON.currPage);
             responseJSON.pageCount = totalCount;
+            console.log(responseJSON);
             document.getElementById(targetElm).innerHTML =
                 Mustache.render(
                     document.getElementById("template-articles").innerHTML,
@@ -242,7 +246,16 @@ function fetchAndDisplayArticles(targetElm,current,totalCount){
     ajax.addEventListener("load", reqListener);
     ajax.open("GET", url, true);
     ajax.send();
+
     currentUrl = url;
+    ajax.onload = function () {
+        document.addEventListener("keyup", function(event) {
+            if (event.keyCode === 13 && document.getElementById("goTo").value.trim() != "") {
+                current = document.getElementById("goTo").value.trim();
+                fetchAndDisplayArticles(targetElm, current, totalCount);
+            }
+        });
+    }
 }
 function addArtDetailLink2ResponseJson(responseJSON){
     responseJSON.articles = responseJSON.articles.map(
@@ -276,7 +289,7 @@ function fetchAndDisplayArticleDetail(targetElm,artIdFromHash,offsetFromHash,tot
  */
 function fetchAndProcessArticle(targetElm,artIdFromHash,offsetFromHash,totalCountFromHash,forEdit, forDelete){
     const url = `${urlBase}/article/${artIdFromHash}`;
-
+    var result;
     console.log();
     function reqListener () {
         // stiahnuty text
@@ -303,6 +316,7 @@ function fetchAndProcessArticle(targetElm,artIdFromHash,offsetFromHash,totalCoun
                     `#artEdit/${responseJSON.id}/${offsetCurrent}/${totalCountFromHash}`;
                 responseJSON.deleteLink=
                     `#artDelete/${responseJSON.id}/${offsetFromHash}/${totalCountFromHash}`;
+                result = responseJSON;
                 document.getElementById(targetElm).innerHTML =
                     Mustache.render(
                         document.getElementById("template-article").innerHTML,
@@ -336,6 +350,100 @@ function fetchAndProcessArticle(targetElm,artIdFromHash,offsetFromHash,totalCoun
         ajax.open("GET", url, true);
     }
     ajax.send();
+    const urlComment = `${urlBase}/article/${artIdFromHash}/comment`;
+    console.log("Comment url:");
+    console.log(urlComment);
+    var responseJSONCopy;
+    function reqListener1() {
+        // stiahnuty text
+        /*console.log(this.responseText)*/
+        if (this.status == 200) {
+            const responseJSON = JSON.parse(this.responseText);
+            console.log("Comments:");
+            console.log(responseJSON);
+            if (responseJSON.comments.totalCount > responseJSON.comments.max){
+                responseJSON.comments.totalCount = responseJSON.comments.max;
+            }
+            responseJSONCopy = responseJSON;
+        }
+        else {
+            console.log("Comments Error");
+        }
+    }
+    var ajax1 = new XMLHttpRequest();
+    ajax1.addEventListener("load", reqListener1);
+    ajax1.open("GET", urlComment, true);
+    ajax1.send();
+    ajax1.onload = function () {
+        if(ajax1.status === 200) {
+            console.log("Comment has been successfully read!");
+            console.log(responseJSONCopy);
+            if (result) {
+                result.comments = [];
+                for (var i = 0; i < responseJSONCopy.meta.totalCount; i++) {
+                    result.comments[i] = [];
+                    result.comments[i].push(responseJSONCopy.comments[i].id);
+                    result.comments[i].push(responseJSONCopy.comments[i].author);
+                    result.comments[i].push(responseJSONCopy.comments[i].dateCreated.slice(0, 10));
+                    result.comments[i].push(responseJSONCopy.comments[i].lastUpdated);
+                    result.comments[i].push(responseJSONCopy.comments[i].text);
+                }
+                console.log(result);
+                document.getElementById(targetElm).innerHTML =
+                    Mustache.render(
+                        document.getElementById("template-article").innerHTML,
+                        result
+                    );
+            }
+            document.getElementById("commentSend").onclick = function () {
+                document.getElementById("myForm1").hidden = null;
+                /*document.getElementById(targetElm).innerHTML = document.getElementById("template-article").innerHTML;*/
+                let post;
+                function processOpnFrmData(event) {
+                    //1.prevent normal event (form sending) processing
+                    event.preventDefault();
+
+                    //2. Read and adjust data from the form (here we remove white spaces before and after the strings)
+                    const nopName = document.getElementById("nameEL1").value.trim();
+                    const nopOpn = document.getElementById("recenzia1").value.trim();
+                    //const nopWillReturn = document.getElementById("willReturnElm").checked;
+                    //3. Verify the data
+                    if(nopName==="" || nopOpn===""){
+                        window.alert("Please, enter all data");
+                        return;
+                    }
+
+                    //3. Add the data to the array opinions and local storage
+                    const newOpinion =
+                        {
+                            author: nopName,
+                            text: nopOpn
+                        };
+                    post = JSON.stringify(newOpinion);
+                    console.log("New opinion:\n "+JSON.stringify(newOpinion));
+                    //5. Reset the form
+                    document.getElementById("myForm1").reset(); //resets the form
+                    const url2 = `https://wt.kpi.fei.tuke.sk/api/article/${artIdFromHash}/comment`;
+                    let xhr1 = new XMLHttpRequest();
+                    xhr1.open('POST', url2, true);
+                    xhr1.setRequestHeader('Content-type','application/json; charset=utf-8');
+                    xhr1.send(post);
+                    fetchAndDisplayArticleDetail(targetElm,artIdFromHash,offsetFromHash,totalCountFromHash);
+                    xhr1.onload = function () {
+                        if(xhr1.status === 201) {
+                            console.log("Comment successfully created!");
+                            alert("The comment has successfully posted.");
+                        }
+                    }
+                }
+                document.getElementById("myForm1").addEventListener("submit", event => processOpnFrmData(event));
+            }
+        }
+        else {
+            console.log("Comment has not been read");
+        }
+    }
+
 }
 function editArticle(targetElm, artIdFromHash, offsetFromHash, totalCountFromHash) {
     fetchAndProcessArticle(...arguments,true, false);
