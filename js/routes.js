@@ -7,9 +7,17 @@ export default [
         ///id of the target html element:
         target:"router-view",
         //the function that returns content to be rendered to the target html element:
-        getTemplate:(targetElm) =>
+        getTemplate:(targetElm) => {
             document.getElementById(targetElm).innerHTML =
-                document.getElementById("template-welcome").innerHTML,
+                document.getElementById("template-welcome").innerHTML
+            document.getElementById("googleButton").hidden = window.userInfo != null || window.location.hash != "#sign";
+            document.getElementById("art").classList = null;
+            document.getElementById("wel").classList = "active";
+            document.getElementById("opi").classList = null;
+            document.getElementById("add").classList = null;
+            document.getElementById("acc").classList = null;
+        }
+
     },
     {
         hash:"articles",
@@ -30,10 +38,12 @@ export default [
             if (localStorage.myTreesComments) {
                 opinions = JSON.parse(localStorage.myTreesComments);
             }
+            document.getElementById("googleButton").hidden = window.userInfo != null || window.location.hash != "#sign";
             document.getElementById("art").classList = null;
             document.getElementById("wel").classList = null;
             document.getElementById("opi").classList = null;
             document.getElementById("add").classList = "active";
+            document.getElementById("acc").classList = null;
             document.getElementById(targetElm).innerHTML = document.getElementById("template-addOpinion").innerHTML;
             document.getElementById("nameEL").value = "Anonymous";
             document.getElementById("contactChoice2").value = "No";
@@ -55,6 +65,14 @@ export default [
                 } else {
                     document.getElementById("contactChoice3").value = "No";
                 }
+            }
+            if (window.userInfo != null){
+                document.getElementById("nameEL").value = window.userInfo.name;
+                document.getElementById("nameEL").disabled = false;
+                document.getElementById("contactChoice2").value = "Yes";
+                document.getElementById("contactChoice1").value = "No";
+                document.getElementById("contactChoice1").checked = false;
+                document.getElementById("contactChoice2").checked = true;
             }
             let post;
             function processOpnFrmData(event) {
@@ -147,15 +165,22 @@ export default [
         hash:"artDelete",
         target:"router-view",
         getTemplate: deleteArticle
+    },
+    {
+        hash: "sign",
+        target: "router-view",
+        getTemplate: sign
     }
 ];
 const urlBase = "https://wt.kpi.fei.tuke.sk/api";
 const articlesPerPage = 20;
 function createHtml4opinions(targetElm){
+    document.getElementById("googleButton").hidden = window.userInfo != null || window.location.hash != "#sign";
     document.getElementById("art").classList = null;
     document.getElementById("wel").classList = null;
     document.getElementById("opi").classList = "active";
     document.getElementById("add").classList = null;
+    document.getElementById("acc").classList = null;
     const opinionsFromStorage=localStorage.myTreesComments;
     let opinions=[];
     if(opinionsFromStorage){
@@ -173,10 +198,12 @@ var currentUrl;
 var offsetCurrent = 0;
 var currentPage = 1;
 function fetchAndDisplayArticles(targetElm,current,totalCount){
+    document.getElementById("googleButton").hidden = window.userInfo != null || window.location.hash != "#sign";
     document.getElementById("art").classList = "active";
     document.getElementById("wel").classList = null;
     document.getElementById("opi").classList = null;
     document.getElementById("add").classList = null;
+    document.getElementById("acc").classList = null;
     totalCount = parseInt(totalCount);
     current = parseInt(current);
     currentPage = current;
@@ -258,6 +285,8 @@ function fetchAndDisplayArticles(targetElm,current,totalCount){
     }
 }
 function addArtDetailLink2ResponseJson(responseJSON){
+
+    document.getElementById("googleButton").hidden = window.userInfo != null || window.location.hash != "#sign";
     responseJSON.articles = responseJSON.articles.map(
         article =>(
             {
@@ -288,6 +317,7 @@ function fetchAndDisplayArticleDetail(targetElm,artIdFromHash,offsetFromHash,tot
  * @param forDelete
  */
 function fetchAndProcessArticle(targetElm,artIdFromHash,offsetFromHash,totalCountFromHash,forEdit, forDelete){
+    document.getElementById("googleButton").hidden = window.userInfo != null || window.location.hash != "#sign";
     const url = `${urlBase}/article/${artIdFromHash}`;
     var result;
     console.log();
@@ -397,6 +427,10 @@ function fetchAndProcessArticle(targetElm,artIdFromHash,offsetFromHash,totalCoun
             }
             document.getElementById("commentSend").onclick = function () {
                 document.getElementById("myForm1").hidden = null;
+                if (window.userInfo != null){
+                    document.getElementById("nameEL1").value = window.userInfo.name;
+                    console.log("NONULL");
+                }
                 /*document.getElementById(targetElm).innerHTML = document.getElementById("template-article").innerHTML;*/
                 let post;
                 function processOpnFrmData(event) {
@@ -404,9 +438,11 @@ function fetchAndProcessArticle(targetElm,artIdFromHash,offsetFromHash,totalCoun
                     event.preventDefault();
 
                     //2. Read and adjust data from the form (here we remove white spaces before and after the strings)
+
                     const nopName = document.getElementById("nameEL1").value.trim();
                     const nopOpn = document.getElementById("recenzia1").value.trim();
                     //const nopWillReturn = document.getElementById("willReturnElm").checked;
+
                     //3. Verify the data
                     if(nopName==="" || nopOpn===""){
                         window.alert("Please, enter all data");
@@ -450,4 +486,32 @@ function editArticle(targetElm, artIdFromHash, offsetFromHash, totalCountFromHas
 }
 function deleteArticle(targetElm, artIdFromHash, offsetFromHash, totalCountFromHash){
     fetchAndProcessArticle(...arguments, true, true);
+}
+function sign(targetElm) {
+    document.getElementById("art").classList = null;
+    document.getElementById("wel").classList = null;
+    document.getElementById("opi").classList = null;
+    document.getElementById("add").classList = null;
+    document.getElementById("acc").classList = "active";
+
+    if (window.userInfo) {
+        document.getElementById("googleButton").hidden = true;
+        document.getElementById(targetElm).innerHTML =
+            Mustache.render(
+                document.getElementById("googleSign").innerHTML,
+                window.userInfo
+            );
+        document.getElementById("sgnOut").onclick = function () {
+            window.location.href = "#welcome";
+            window.userInfo = null;
+        }
+    }
+
+    else {
+        document.getElementById(targetElm).innerHTML =
+            document.getElementById("googleReg").innerHTML
+        console.log("NOTHING");
+        document.getElementById("googleButton").hidden = false;
+        document.getElementById("googleButton").hidden = window.userInfo != null || window.location.hash != "#sign";
+    }
 }
