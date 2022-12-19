@@ -3,6 +3,52 @@
     src: local("Trickster"),
     url(../Fonts/Montserrat-Regular.ttf)
 }
+.Iam {
+    padding: 2em 1em;
+    font: normal 40px Trickster, sans-serif;
+    color: #999;
+}
+.Iam p {
+    height: 50px;
+    float: left;
+    margin-right: 0.3em;
+}
+.Iam b {
+    float: left;
+    overflow: hidden;
+    position: relative;
+    height: 50px;
+    top: 40px;
+}
+.Iam .innerIam {
+    display: inline-block;
+    color: #131313;
+    position: relative;
+    white-space: nowrap;
+    top: 0;
+    left: 0;
+    /*animation*/
+    animation:move 20s;
+    /*animation-iteration-count*/
+    animation-iteration-count:infinite;
+    /*animation-delay*/
+    animation-delay:1s;
+}
+@keyframes move{
+    0%  { top: 0px; }
+    5% { top: -50px; }
+    10% { top: -100px; }
+    15% { top: -150px; }
+    20% { top: -200px; }
+    25% { top: -250px; }
+    30% { top: -300px; }
+    35% { top: -350px; }
+    40% { top: -400px; }
+    45% { top: -450px; }
+    50% { top: -500px; }
+    55% { top: -550px; }
+    60% { top: -590px; }
+}
 canvas {
     float: right;
 }
@@ -10,7 +56,6 @@ canvas {
     overflow: hidden;
     background-color: #333;
 }
-
 .topnav a {
     float: left;
     color: #f2f2f2;
@@ -90,57 +135,6 @@ a {
     height: 1px;
     background: linear-gradient(to right, white, #393939 60px);
 }
-/*@media(max-width:599px) {
-    .toc-wrapper {
-        padding-left: 80px;
-        padding-bottom: 30px;
-        position: relative;
-    }
-
-    h1 {
-        padding-left: 10px;
-        padding-top: 10px;
-        margin-bottom: 15px;
-    }
-}
-
-@media(min-width:600px) and (max-width:767px) {
-    h1 {
-        font-weight: 600;
-        padding: 60px 30px;
-    }
-
-    .toc {
-        padding-top: 200px;
-        padding-bottom: 100px;
-        margin: 0 auto;
-    }
-}
-
-@media(min-width:600px) {
-    .toc-wrapper {
-        display: flex;
-    }
-
-    h1 {
-        padding: 100px 60px;
-        background: #393939;
-        color: white;
-    }
-    .toc {
-        padding-top: 200px;
-        padding-bottom: 100px;
-        margin: 0 auto;
-    }
-}
-
-@media(min-width:768px) {
-    .toc {
-        padding-top: 200px;
-        padding-bottom: 100px;
-        margin: 0 auto;
-    }
-}*/
 @media screen {
     * {
         margin: 0;
@@ -150,12 +144,24 @@ a {
     .container {
         padding: 0 20px;
     }
+    .card {
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        max-width: 400px;
+        margin: 0 auto;
+        text-align: center;
+    }
 
+    .title {
+        color: grey;
+        max-width: 400px;
+        margin: 0 auto;
+        text-align: center;
+        font-size: 18px;
+    }
     button {
 
         /* remove default behavior */
         appearance:none;
-        -webkit-appearance:none;
 
         /* usual styles */
         padding:10px;
@@ -205,7 +211,7 @@ a {
         border: 0;
     }
     .border-bottom-input {
-        border:0; //
+        border:0;
         border-bottom:1px solid #eee;
     }
     .rounded-input {
@@ -320,12 +326,6 @@ a {
             transform: translateY(0%);
         }
     }
-    /*a {
-        display: inline-block;
-        font-size: 1em;
-        color: royalblue;
-        background-color: white;
-    }*/
 }
 
 h1 {
