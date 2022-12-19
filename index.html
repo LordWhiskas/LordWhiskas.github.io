@@ -3,18 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="author" content="Stefan Korecko">
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <link rel="stylesheet" href="css/style.css">
     <title>Videohosting</title>
 </head>
+
 <body>
-
-
+        <script src="js/GoogleSignIn.js"></script>
+        <script src="https://accounts.google.com/gsi/client" async defer></script>
 <nav class="topnav">
     <a id="wel" class="active" href="#welcome">Welcome</a>
     <a id="art" href="#articles/1/100">Articles</a>
     <a id="opi" href="#opinions">Opinions</a>
     <a id="add" href="#addOpinion">Add Opinion and Article </a>
+    <a id="acc" href="#sign"> SignIn or SignOut</a>
 </nav>
 
 <main id="router-view">
@@ -27,22 +28,24 @@
 
 <script id="template-welcome" type="text/template">
     <header>
-        <h2>Videohosting</h2>
     </header>
-    <img class="index-photo" alt="image" srcset="img/indeximage.jpg 100w, img/indeximage.jpg 500w"
-         sizes="(max-width: 500px) 150px,(max-width: 1000px) 200px, 500px">
-    <p>
-        Jednoducho povedané, toto je stránka na ukladanie videoobsahu. Takéto stránky sa používajú na rôzne účely:
-        niekto na
-        nich trávi čas kvôli zábave a získavaniu potrebných informácií, niekto zarába peniaze na reklame uverejňovaním
-        zaujímavých videí a priťahovaním nových predplatiteľov. Zástupcovia obchodnej komunity využívajú takéto služby
-        na
-        prilákanie ďalšej návštevnosti na stránku, predstavenie potenciálnych zákazníkov značke/produktu, získanie
-        spätnej
-        väzby, priame recenzie atď. Celá SEO propagácia je založená na získavaní nových zákazníkov z výsledkov
-        vyhľadávania.
-        Prispievajú k tomu kvalitné videá, keďže videoobsah si v poslednej dobe získava čoraz väčšiu obľubu.
-    </p>
+    <div class="Iam">
+        <h2>Videohosting</h2>
+        <b>
+        <div class="innerIam">
+            Jednoducho povedané, toto je stránka na ukladanie videoobsahu. <br />Takéto stránky sa používajú na rôzne účely:<br />
+            niekto na<br />
+            nich trávi čas kvôli zábave a získavaniu potrebných informácií,<br /> niekto zarába peniaze na reklame uverejňovaním<br />
+            zaujímavých videí a priťahovaním nových predplatiteľov.<br /> Zástupcovia obchodnej komunity využívajú takéto služby<br />
+            na<br />
+            prilákanie ďalšej návštevnosti na stránku,<br /> predstavenie potenciálnych zákazníkov značke/produktu,<br /> získanie
+            spätnej
+            väzby,<br /> priame recenzie atď.<br /> Celá SEO propagácia je založená na získavaní nových zákazníkov z výsledkov<br />
+            vyhľadávania.<br />
+            Prispievajú k tomu kvalitné videá,<br /> keďže videoobsah si v poslednej dobe získava čoraz väčšiu obľubu.<br />
+        </div>
+        </b>
+    </div>
 </script>
 <script id="template-articles" type="text/template">
     <h2>Main Content</h2>
@@ -143,8 +146,8 @@
                     <span><input id="contactChoice2" type="radio" name="radio1" value=""></span>
                 </p>
                 <p>
-                    <label for="contactChoice3" class="form_text">Chcete poslať kópiu formulára poštou?</label>
-                    <span><input id="contactChoice3" type="checkbox" name="flag" value="No"></span>
+                    <label for="contactChoice3"  class="form_text">Chcete poslať kópiu formulára poštou?</label>
+                    <span><input id="contactChoice3" checked type="checkbox" name="flag" value="No"></span>
                 </p>
                 <p>
                     <label class="form_text" for="keywords">Kľúčové slová:</label>
@@ -318,12 +321,29 @@ The first character must not be a space."  />
         {{/nextPage}}
     </nav>
 </script>
-
-<!--include mustache javascript-->
+<script id="googleSign" type="text/template">
+    <div class="card">
+        {{#.}}
+        <img src="{{picture}}" class="rounded-circle" width="100" height="100"  alt="googlePhoto"/>
+        <p class="title">{{name}}</p>
+        <p class="title">ID:{{sub}}</p>
+        <p class="title">{{email}}</p>
+        {{/.}}
+        <p class="title"><button type="submit" id="sgnOut">Sign Out</button></p>
+    </div>
+</script>
+<div
+        id="g_id_onload"
+        data-client_id="214011745521-1sljpu08m4tg520k5lcj3n1ag8ebn29s"
+        data-auto_prompt="false"
+        data-callback="startGSingIn"></div>
+<div id="googleButton" hidden class="g_id_signin" data-type="standard"></div>
+<script id="googleReg" type="text/template">
+<h2>SignIn</h2>
+</script>
+        <!--include mustache javascript-->
 <script src="js/mustache.min.js"></script>
-
 <!--include javascript for this page-->
 <script type="module" src="js/index.js"></script>
-
 </body>
 </html>
